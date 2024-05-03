@@ -10,15 +10,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Check swiftlint
-        run:  which swiftlint 
 
+          
       - name: Check swiftlint
-        id: check-swiftlint
-        run: echo "result=$(which swiftlint)" >> $GITHUB_OUTPUT
+        run: |
+          if type swiftlint > /dev/null 2>&1; then
+            echo "SWIFTLINT_INSTALLED=true" >> $GITHUB_ENV
+          else
+            echo "SWIFTLINT_INSTALLED=false" >> $GITHUB_ENV
+          fi
 
       - name: Install swiftlint
-        if: ${{ contains(steps.check-swiftlint.outputs.result, 'not found') }}
+        if: env.SWIFTLINT_INSTALLED == 'false'
         run: brew install swiftlint
 
       - name: Run swiftlint
