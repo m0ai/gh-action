@@ -1,0 +1,23 @@
+name: MacOS Workflow
+on: [push]
+
+jobs:
+  lint:
+    name: swiftlint test 
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Check swiftlint
+        id: check-swiftlint
+        run: |
+          echo "result=$(which swiftlint)" >> $GITHUB_OUTPUT
+
+      - name: Install swiftlint
+        if: ${{ contains(steps.check-swiftlint.outputs.result, 'not found') }}
+        run: brew install swiftlint
+
+      - name: Run swiftlint
+        run: swiftlint --version
