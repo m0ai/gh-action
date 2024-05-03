@@ -11,10 +11,11 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Check swiftlint
+        run:  which swiftlint 
+
+      - name: Check swiftlint
         id: check-swiftlint
-        run: |
-          echo "result=$(which swiftlint)" >> $GITHUB_OUTPUT
-          which swiftlint
+        run: echo "result=$(which swiftlint)" >> $GITHUB_OUTPUT
 
       - name: Install swiftlint
         if: ${{ contains(steps.check-swiftlint.outputs.result, 'not found') }}
